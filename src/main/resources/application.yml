@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  session-timeout: 30
+  tomcat.max-threads: 0
+  tomcat.uri-encoding: UTF-8
+spring:
+  datasource:
+    name: Resource
+#    数据库连接地址
+    url: jdbc:mysql://39.96.221.167:3306/Resource
+#    数据库用户名
+    username: root
+#    数据库连接密码
+    password: yx20
+
+#   配置mysql驱动
+    driverClassName: com.mysql.jdbc.Driver
+#   配置当前要使用的数据源的操作类型
+    type: com.alibaba.druid.pool.DruidDataSource
+    dbcp2:
+        # 进行数据库连接池的配置
+      min-idle: 5
+        # 数据库连接池的最小维持连接数
+      initial-size: 5
+        # 初始化提供的连接数
+      max-total: 5
+        # 最大的连接数
+      max-wait-millis: 200
+        # 等待连接获取的最大超时时间
+
+#    mybatis的mapper配置文件
+mybatis:
+  config-location: classpath:mybatis-config.xml  # mybatis配置文件所在路径
+  mapper-locations: classpath:mapper/*.xml   # 所有的mapper映射文件
+  type-aliases-package: com.syx.management.mapper # 定义所有操作类的别名所在包
+debug: true
+
+
+
+
+
+
+
+
+
+    
+
+
