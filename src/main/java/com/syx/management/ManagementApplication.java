@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @SpringBootApplication
 @RestController
-@MapperScan("com.syx.management.mapper")
+@MapperScan("com.syx.management.core.mapper")
 public class ManagementApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ManagementApplication.class, args);
     }
+
     @GetMapping("/hello")
-        public String hw(){
-        return "hello word";
-        }
+    public String hello() {
+        return "hello";
+    }
 
 }

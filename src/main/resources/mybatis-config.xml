@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <mappers>
-
+<!--        <mapper>-->
+<!--            <typeAlias type="com.syx.management.core.entity.User" alias="User"/>-->
+<!--        </mapper>-->
     </mappers>
 </configuration>
