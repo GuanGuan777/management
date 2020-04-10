@@ -10,7 +10,7 @@ import java.util.Collection;
  * SpringSecurity用户的实体
  * 注意:这里必须要实现UserDetails接口
  * @Author haha
- * @CreateTime 
+ * @CreateTime
  */
 @Data
 public class SelfUserEntity implements Serializable, UserDetails {
@@ -39,6 +39,10 @@ public class SelfUserEntity implements Serializable, UserDetails {
 	 * 用户角色
 	 */
 	private Collection<GrantedAuthority> authorities;
+
+
+
+
 	/**
 	 * 账户是否过期
 	 */

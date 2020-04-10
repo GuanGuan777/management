@@ -1,39 +1,46 @@
 package com.syx.management.controller;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.syx.management.common.utils.ResultUtil;
 import com.syx.management.common.utils.SecurityUtil;
 import com.syx.management.core.entity.BaseResponse;
-import com.syx.management.core.entity.LoginForm;
 import com.syx.management.core.entity.SysUserEntity;
 import com.syx.management.core.entity.SysUserRoleEntity;
+import com.syx.management.core.entity.user.Admin;
+import com.syx.management.core.entity.user.Student;
+import com.syx.management.core.entity.user.Teacher;
+import com.syx.management.core.service.AdminService;
+import com.syx.management.core.service.StudentService;
 import com.syx.management.core.service.SysMenuService;
 import com.syx.management.core.service.SysRoleService;
 import com.syx.management.core.service.SysUserRoleService;
 import com.syx.management.core.service.SysUserService;
+import com.syx.management.core.service.TeacherService;
 import com.syx.management.core.service.UserService;
 import com.syx.management.security.entity.SelfUserEntity;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
 /**
  * @ClassName UserController
@@ -55,6 +62,14 @@ public class UserController {
     @Resource
     private SysRoleService sysRoleService;
 
+    @Resource
+    private AdminService adminService;
+
+    @Resource
+    private StudentService studentService;
+
+    @Resource
+    private TeacherService teacherService;
 
     @Resource
     private SysUserRoleService sysUserRoleService;
@@ -67,23 +82,16 @@ public class UserController {
     public UserController() {
     }
 
-
-    @PostMapping("/login")
-    public BaseResponse login(@RequestBody LoginForm loginForm){
-        return new BaseResponse();
-    }
-
     // ADMIN 1 STUDENT 2 TEACHER 3
     @PostMapping("/")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String, Object> AddUser(@RequestBody Map<String,String> userInfo) {
-        if (sysUserService.selectUserByName(userInfo.get("username"))!=null){
-            Map<String,Object>result = new HashMap<String,Object>();
-            result.put("msg","用户名已存在");
+    public Map<String, Object> AddUser(@RequestBody Map<String, String> userInfo) {
+        if (sysUserService.selectUserByName(userInfo.get("username")) != null) {
+            Map<String, Object> result = new HashMap<String, Object>();
+            result.put("msg", "用户名已存在");
             return ResultUtil.resultError(result);
-        }
-        else {
+        } else {
             SysUserEntity sysUserEntity = new SysUserEntity();
             sysUserEntity.setUsername(userInfo.get("username"));
             sysUserEntity.setPassword(bCryptPasswordEncoder.encode("123456"));
@@ -93,19 +101,34 @@ public class UserController {
             sysUserRoleEntity.setRoleId(Long.valueOf(userInfo.get("role_id")));
             sysUserRoleEntity.setUserId(sysUserEntity.getUserId());
             sysUserRoleService.save(sysUserRoleEntity);
-            Map<String,Object>result = new HashMap<String, Object>();
-            result.put("msg","用户已创建");
+            Map<String, Object> result = new HashMap<String, Object>();
+            result.put("msg", "用户已创建");
             return ResultUtil.resultSuccess(result);
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/info")
-    public Map<String,Object> userLogin(){
-        Map<String,Object>result = new HashMap<>();
+    //  @PreAuthorize("hasAnyRole['ADMIN,STUDENT,TEACHER']")
+    public Map<String, Object> getUserInfo() {
+        Map<String, Object> result = new HashMap<>();
         SelfUserEntity userDetails = SecurityUtil.getUserInfo();
-        result.put("title","管理");
-        result.put("data",userDetails);
+        try {
+            if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                Admin admin = adminService.findAdminByUserId(userDetails.getUserId());
+                result.put("data", admin);
+            } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STUDENT"))) {
+                Student student = studentService.findStudentdByUserId(userDetails.getUserId());
+                result.put("data", student);
+            } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_TEACHER"))) {
+                Teacher teacher = teacherService.findTeacherByUserId(userDetails.getUserId());
+                result.put("data", teacher);
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+            result.put("msg", "没有此用户");
+            return ResultUtil.resultError(result);
+        }
+        result.put("title", "获取用户信息");
         return ResultUtil.resultSuccess(result);
     }
 

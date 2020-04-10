@@ -100,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // 不进行权限验证的请求或资源(从配置文件中读取)
                 .antMatchers(JWTConfig.antMatchers.split(",")).permitAll()
+//                .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
                 // 其他的需要登陆后才能访问
                 .anyRequest().authenticated()
                 .and()
