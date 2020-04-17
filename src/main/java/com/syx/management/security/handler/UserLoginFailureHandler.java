@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserLoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+
         if(e instanceof UsernameNotFoundException){
             log.info("登陆失败"+e.getMessage());
             ResultUtil.responseJson(httpServletResponse,ResultUtil.resultCode(500,"用户名不存在"));
@@ -42,6 +44,12 @@ public class UserLoginFailureHandler implements AuthenticationFailureHandler {
             log.info("登陆失败"+e.getMessage());
             ResultUtil.responseJson(httpServletResponse,ResultUtil.resultCode(500,"用户名密码不正确"));
         }
+
+//        if(e instanceof InsufficientAuthenticationException){
+//            log.info("登陆失败"+e.getMessage());
+//            ResultUtil.responseJson(httpServletResponse,ResultUtil.resultCode(403,e.getMessage()));
+//        }
+
         ResultUtil.responseJson(httpServletResponse,ResultUtil.resultCode(500,"登录失败"));
     }
 }

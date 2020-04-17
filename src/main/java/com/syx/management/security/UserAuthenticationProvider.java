@@ -8,12 +8,14 @@ import javax.annotation.Resource;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -48,6 +50,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userName = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
+        CustomWebAuthenticationDetails details = (CustomWebAuthenticationDetails) authentication.getDetails();
         SelfUserEntity userInfo = selfUserDetailService.loadUserByUsername(userName);
         if(userInfo == null){
             throw new UsernameNotFoundException("用户名不存在");
@@ -60,9 +63,20 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         }
         Set<GrantedAuthority>authorities = new HashSet<>();
         List<SysRoleEntity>sysRoleEntityList = sysUserService.selectSysRoleByUserId(userInfo.getUserId());
+        boolean noPermission = false;
         for(SysRoleEntity sysRoleEntity:sysRoleEntityList){
+            log.info(sysRoleEntity.getRoleName());
+            log.info(details.getCategory());
+            log.info("[{}]",!sysRoleEntity.getRoleName().equals(details.getCategory()));
             authorities.add(new SimpleGrantedAuthority("ROLE_"+sysRoleEntity.getRoleName()));
         }
+        if(!authorities.contains(new SimpleGrantedAuthority("ROLE_"+details.getCategory()))){
+            log.info("ssss");
+            throw new InsufficientAuthenticationException("没有权限，请检查角色是否选择正确");
+        }
+
+//        if(sysRoleEntity.getRoleName().equals(details.getCategory())){
+//        }
         userInfo.setAuthorities(authorities);
 
         return new UsernamePasswordAuthenticationToken(userInfo,password,authorities);

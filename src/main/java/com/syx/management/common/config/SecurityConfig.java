@@ -1,9 +1,11 @@
 package com.syx.management.common.config;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import com.syx.management.filter.JWTAuthenticationTokenFilter;
 import com.syx.management.security.UserAuthenticationProvider;
@@ -67,6 +70,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private UserAuthenticationProvider userAuthenticationProvider;
 
+    @Resource
+    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails>authenticationDetailsSource;
+
+
     /**
      * 自定义登录逻辑验证器
      */
@@ -111,6 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
 //                .loginProcessingUrl("/user/login")
                 .loginPage("/user/login")
+                .authenticationDetailsSource(authenticationDetailsSource)
                 // 配置登录成功自定义处理类
                 .successHandler(userLoginSuccessHandler)
                 // 配置登录失败自定义处理类

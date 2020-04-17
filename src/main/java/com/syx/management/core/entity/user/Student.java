@@ -1,12 +1,16 @@
 package com.syx.management.core.entity.user;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
+
 
 /**
  * @ClassName Student
@@ -22,6 +26,7 @@ public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
+    @TableId
     private Long studentId;
 
 
@@ -31,13 +36,12 @@ public class Student implements Serializable {
 
     private int sex;
 
-    private String college;
 
     private String classes;
 
-    private Date create_time;
+    private Timestamp createTime;
 
-    private Date update_time;
+    private Timestamp updateTime;
 
     private String courses;
 
@@ -45,5 +49,16 @@ public class Student implements Serializable {
 
     @TableField(exist = false)
     private String role = "STUDENT";
+
+    private String email;
+
+    private String phone;
+
+    private Date admissionDate;
+
+    private Date graduationDate ;
+
+    private Date birthdate;
+
 
 }

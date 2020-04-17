@@ -1,5 +1,6 @@
 package com.syx.management.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,9 +108,22 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public Map<String, Object> getUsers() {
+            Map<String, Object> result = new HashMap<String, Object>();
+//            userService
+            result.put("msg", "成功查询");
+            return ResultUtil.resultSuccess(result);
+    }
+
     @GetMapping(value = "/info")
     //  @PreAuthorize("hasAnyRole['ADMIN,STUDENT,TEACHER']")
     public Map<String, Object> getUserInfo() {
+        Date date = new Date(1586188800000L);
+        log.info(date.toString());
         Map<String, Object> result = new HashMap<>();
         SelfUserEntity userDetails = SecurityUtil.getUserInfo();
         try {

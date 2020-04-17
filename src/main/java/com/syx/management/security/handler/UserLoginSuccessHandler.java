@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSON;
 import com.syx.management.common.config.JWTConfig;
 import com.syx.management.common.utils.ResultUtil;
 import com.syx.management.filter.JwtFilter;
@@ -37,10 +38,10 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         SelfUserEntity selfUserEntity = (SelfUserEntity)authentication.getPrincipal();
         String token = JwtUtils.createAccessToken(selfUserEntity);
         token = JWTConfig.tokenPrefix + token;
-
         Map<String,Object> resultData = new HashMap<>();
         resultData.put("code","200");
         resultData.put("msg","登录成功");
+//        resultData.put("role",selfUserEntity.getAuthorities());
         resultData.put("token",token);
         ResultUtil.responseJson(httpServletResponse,resultData);
     }
