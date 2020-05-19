@@ -71,7 +71,6 @@ public class StorageController {
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
-    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
         Resource resource = storageService.loadFileAsResource(fileName);
 

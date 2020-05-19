@@ -11,4 +11,6 @@ import com.syx.management.core.entity.CourseEntity;
  * @Version 1.0
  **/
 public interface CourseService extends IService<CourseEntity> {
+
+    CourseEntity selectById(int courseId);
 }

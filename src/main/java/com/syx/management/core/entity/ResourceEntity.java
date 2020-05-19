@@ -30,6 +30,8 @@ public class ResourceEntity implements Serializable {
 
     private String uploader;
 
+    private String description;
+
     private Integer audit;
 
     private String url;
