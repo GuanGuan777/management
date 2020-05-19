@@ -1,6 +1,6 @@
 package com.syx.management.core.service;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 import com.syx.management.core.entity.ResourceEntity;
 
@@ -12,7 +12,11 @@ import com.syx.management.core.entity.ResourceEntity;
  * @Version 1.0
  **/
 public interface ResourceService {
-//    String saveUploadFile(MultipartFile file) throws Exception;
+    //    String saveUploadFile(MultipartFile file) throws Exception;
 
     int addResource(ResourceEntity resourceEntity);
+
+    List<ResourceEntity> getResource(int courseId);
+
+    int deleteResource(Integer resourceId);
 }

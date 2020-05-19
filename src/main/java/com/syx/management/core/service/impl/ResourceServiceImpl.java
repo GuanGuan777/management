@@ -1,11 +1,11 @@
 package com.syx.management.core.service.impl;
 
-import java.io.File;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.syx.management.core.entity.ResourceEntity;
 import com.syx.management.core.mapper.ResourceMapper;
@@ -36,5 +36,17 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, ResourceEnt
     @Override
     public int addResource(ResourceEntity resourceEntity) {
         return baseMapper.insert(resourceEntity);
+    }
+
+    @Override
+    public List<ResourceEntity> getResource(int courseId) {
+        QueryWrapper<ResourceEntity> wrapper = new QueryWrapper<ResourceEntity>();
+        wrapper.eq("course_id",courseId);
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public int deleteResource(Integer resourceId) {
+        return baseMapper.deleteById(resourceId);
     }
 }

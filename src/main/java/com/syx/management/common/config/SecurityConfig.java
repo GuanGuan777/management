@@ -109,6 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(JWTConfig.antMatchers.split(",")).permitAll()
 //                .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
                 // 其他的需要登陆后才能访问
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // 配置未登录自定义处理类

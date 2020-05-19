@@ -26,13 +26,15 @@ public class ResourceEntity implements Serializable {
 
     private String title;
 
-    private String type;
+    private Integer type;
 
     private String uploader;
 
-    private Integer check;
+    private Integer audit;
 
     private String url;
+
+    private String downloadUrl;
 
     private Date createTime;
 
@@ -42,10 +44,13 @@ public class ResourceEntity implements Serializable {
 
     private String fileName;
 
-    private String code;
+    private String extractingCode;
 
     private String fileType;
 
     private Integer fileSize;
+
+    private String cover;
+
 
 }

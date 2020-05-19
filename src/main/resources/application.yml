@@ -10,7 +10,7 @@ server:
 web.upload-path: E:/upload/
 
 file:
-  upload-dir: ./uploads
+  upload-dir: E:/uploads/
 
 spring:
   http:
@@ -22,8 +22,8 @@ spring:
   mvc:
     static-path-pattern: /**
   resources:
-    static-locations:
-      classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,ResourceEntity:${web.upload-path}
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file.upload-dir}
+#    ,classpath:${file.upload-dir},ResourceEntity:${web.upload-path}
   servlet:
     multipart:
       enabled: true

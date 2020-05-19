@@ -58,7 +58,10 @@ public class StorageController {
                 .fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName).toUriString();
-        return new UploadFileResponse(fileName,fileDownloadUri,file.getContentType(),file.getSize());
+        String fileUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/"+fileName).toUriString();
+        return new UploadFileResponse(fileName,fileDownloadUri,fileUri,file.getContentType(),file.getSize());
     }
 
     @PostMapping("/uploadMultipleFiles")

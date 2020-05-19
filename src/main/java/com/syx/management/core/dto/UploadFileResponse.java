@@ -13,12 +13,14 @@ import lombok.Data;
 public class UploadFileResponse {
     private String fileName;
     private String fileDownloadUri;
+    private String fileUri;
     private String fileType;
     private long size;
 
-    public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size) {
+    public UploadFileResponse(String fileName, String fileDownloadUri,String fileUri, String fileType, long size) {
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;
+        this.fileUri = fileUri;
         this.fileType = fileType;
         this.size = size;
     }
