@@ -71,7 +71,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+sysRoleEntity.getRoleName()));
         }
         if(!authorities.contains(new SimpleGrantedAuthority("ROLE_"+details.getCategory()))){
-            log.info("ssss");
             throw new InsufficientAuthenticationException("没有权限，请检查角色是否选择正确");
         }
 
