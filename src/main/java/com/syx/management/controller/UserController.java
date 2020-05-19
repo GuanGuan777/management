@@ -114,7 +114,6 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public Map<String, Object> getUsers() {
             Map<String, Object> result = new HashMap<String, Object>();
-//            userService
             result.put("msg", "成功查询");
             return ResultUtil.resultSuccess(result);
     }

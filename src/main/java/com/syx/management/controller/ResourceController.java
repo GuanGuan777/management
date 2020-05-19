@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,16 @@ public class ResourceController {
         resultMap.put("data",result);
         return ResultUtil.resultSuccess(resultMap);
     }
+
+    @DeleteMapping("/{resourceId}")
+    public Map<String, Object> upload(@PathVariable Integer resourceId){
+        int result = resourceService.deleteResource(resourceId);
+        Map<String,Object>resultMap = new HashMap<>();
+        resultMap.put("data",result);
+        return ResultUtil.resultSuccess(resultMap);
+    }
+
+
 
 //    public Map<String, Object> upload(@RequestParam("files") MultipartFile file) {
 //        try {
