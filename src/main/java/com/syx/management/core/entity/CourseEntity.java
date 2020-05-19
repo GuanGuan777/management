@@ -3,6 +3,7 @@ package com.syx.management.core.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
@@ -20,11 +21,13 @@ public class CourseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId
     private Integer courseId;
 
     private String title;
 
-    private String desc;
+    private String description;
+
 
     private Integer credit;
 

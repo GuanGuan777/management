@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.syx.management.common.utils.ResultUtil;
+import com.syx.management.core.entity.CourseEntity;
 import com.syx.management.core.entity.ResourceEntity;
 import com.syx.management.core.service.CourseService;
 import com.syx.management.core.service.ResourceService;
@@ -49,4 +51,23 @@ public class CourseController {
         resultMap.put("data",result);
         return ResultUtil.resultSuccess(resultMap);
     }
+
+    @GetMapping("/{courseId}")
+    public Map<String, Object> getCourse(@PathVariable int courseId){
+//        CourseEntity result = courseService.selectById(courseId);
+        CourseEntity result = courseService.getById(courseId);
+        Map<String,Object>resultMap = new HashMap<>();
+        resultMap.put("data",result);
+        return ResultUtil.resultSuccess(resultMap);
+    }
+
+
+    @GetMapping("")
+    public Map<String, Object> getCourseList(){
+        List<CourseEntity> result = courseService.list();
+        Map<String,Object>resultMap = new HashMap<>();
+        resultMap.put("data",result);
+        return ResultUtil.resultSuccess(resultMap);
+    }
+
 }
