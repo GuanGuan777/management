@@ -4,11 +4,38 @@ server:
   tomcat.max-threads: 0
   tomcat.uri-encoding: UTF-8
   servlet.context-path: /api/v1
+
+#upload.static.local: /static
+
+web.upload-path: E:/upload/
+
+file:
+  upload-dir: ./uploads
+
 spring:
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations:
+      classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,ResourceEntity:${web.upload-path}
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+
+
   datasource:
     name: Resource
 #    数据库连接地址
-    url: jdbc:mysql://39.96.221.167:3306/Resource
+    url: jdbc:mysql://39.96.221.167:3306/Resource?useUnicode=true&characterEncoding=utf8
 #    数据库用户名
     username: root
 #    数据库连接密码
@@ -75,6 +102,7 @@ mybatis-plus:
     call-setters-on-nulls: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 
 
